@@ -17,25 +17,8 @@
                     <div class="card-body p-5 text-center">
                       
       <div class="d-grid gap-2 col-6 mx-auto ">
-     <button id="btnShow" type="button" class="btn btn-primary btn-lg">Export Tables</button>
-    <div class="modal fade" tabindex="-1" id="testModal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Export Table</h5>
-            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <label class="form-label" for="customFile">Choose Your Excel File</label>
-            <input type="file" class="form-control" id="customFile" />
-          </div>
-          <div class="modal-footer">
-            <a class="btn btn-primary" href="Branch.php" id="btnCheck">Check</a>       
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
+        
+     
     <script>
       const container = document.getElementById("testModal");
       const modal = new bootstrap.Modal(container);
@@ -47,7 +30,7 @@
         modal.hide();
       });
     </script>
-    <a class="btn btn-primary btn-lg" type="button">CRUD</a>
+    <a class="btn btn-primary btn-lg" href="import.php" type="button">Import Excel</a>
     <a class="btn btn-primary btn-lg" type="button">Generate report</a>
   </div>
                     </div>

@@ -6,8 +6,8 @@ session_start();
 
 function compute_table($sem, $batch,$year,$sem_new){
 
-    $con = mysqli_connect(LOCALHOST, DB_USERNAME, DB_PASSWORD);
-    $db_select = mysqli_select_db($con, DB_NAME);
+    $conn = mysqli_connect(LOCALHOST, DB_USERNAME, DB_PASSWORD);
+    $db_select = mysqli_select_db($conn, DB_NAME);
     if ($db_select) {
         // echo "success";
     } 
@@ -27,7 +27,7 @@ function compute_table($sem, $batch,$year,$sem_new){
 
     $sql = "select * from ".$table_1." t1 inner join ".$table_2." t2 on t1.name = t2.name;";
 
-    $result = mysqli_query($con, $sql);
+    $result = mysqli_query($conn, $sql);
 
     if($result){
         echo "Hogay";

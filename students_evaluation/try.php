@@ -16,17 +16,11 @@ include('../config/connection.php');
 <body>
     <?php
 
-    $conn = mysqli_connect(LOCALHOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
 
-    //CHECK CONNECTION
-    if ($conn === false) {
-        die("ERROR" . mysqli_connect_error());
-    }
 
-    // echo "Connected Succesfully" . mysqli_get_host_info($conn);
-    if ($conn) {
-        echo ("Success");
-    }
+
+
+
 
 
     $conn = mysqli_connect(LOCALHOST, DB_USERNAME, DB_PASSWORD);
@@ -34,14 +28,15 @@ include('../config/connection.php');
     if ($db_select) {
         // echo "success";
     }
+    /*
     $table1="2020_fe_sem2";
     $table2="2020_fe_sem1";
 
 
     $sql = "select * from ".$table1." t1 inner join ".$table2." t2 on t1.name = t2.name;";
     
-    $result = mysqli_query($conn, $sql);
-/*
+    $result = mysqli_query($conn, $sql); */
+    /*
     if(mysqli_num_rows($result)>0){
         $no =1;
         $count=0;
@@ -52,7 +47,7 @@ include('../config/connection.php');
             $no++;
         }
     }s
-    echo $count; */
+    echo $count; 
 
     if (mysqli_num_rows($result) > 0) {
         $sn = 1;
@@ -71,8 +66,14 @@ include('../config/connection.php');
             $sn++;
         }
         echo $count;
-    } 
-    
+    } */
+
+    $compare_query = "SELECT count(*) as name from test1 where marks='p'";
+    $compare_query_results = mysqli_query($conn, $compare_query);
+    $data = mysqli_fetch_assoc($compare_query_results);
+    $size = $data['name'];
+    echo $size;
+
     ?>
 
 

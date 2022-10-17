@@ -26,29 +26,48 @@ session_start();
         <div class="col-12 col-md-8 col-lg-6 col-xl-5">
           <div class="card shadow-2-strong" style="border-radius: 1rem;">
             <div class="card-body p-5 text-center">
-              <form method="POST" action="#">
+              <form method="POST" action="table.php">
                 <div class="form-group">
-                  <label for="formGroupExampleInput">ROW-ROW</label>
-                  <input type="text" name="row" class="form-control" id="formGroupExampleInput" placeholder="">
+                  <label for="formGroupExampleInput">From Row</label>
+                  <input type="text" name="from_row" class="form-control" id="formGroupExampleInput" placeholder="Add Row Number">
+                </div>
+                <div class="form-group">
+                  <label for="formGroupExampleInput">To Row</label>
+                  <input type="text" name="to_row" class="form-control" id="formGroupExampleInput" placeholder="Add Row Number">
                 </div>
                 <div class="form-group">
                   <label for="formGroupExampleInput2">NAME</label>
-                  <input type="text" name="name" class="form-control" id="formGroupExampleInput2" placeholder="COLUMN NUMBER">
+                  <input type="text" name="name_col" class="form-control" id="formGroupExampleInput2" placeholder="COLUMN NUMBER">
                 </div>
                 <div class="form-group">
                   <label for="formGroupExampleInput3">MARKS</label>
-                  <input type="text" name="marks" class="form-control" id="formGroupExampleInput2" placeholder="COLUMN NUMBER">
+                  <input type="text" name="marks_col" class="form-control" id="formGroupExampleInput2" placeholder="COLUMN NUMBER">
                 </div><br>
                 <div class="field">
                   <input type="submit" class="btn btn-success" name="submit" value="Submit">
                 </div>
               </form>
               <?php
+              $conn = mysqli_connect(LOCALHOST, DB_USERNAME, DB_PASSWORD);
+              $db_select = mysqli_select_db($conn, DB_NAME);
+              if ($db_select) {
+                  // echo "success";
+              } 
+
               if (isset($_POST['submit'])) {
-                $row= $_POST['row'];
-                $name_col= $_POST['name'];
-                $marks_col= $_POST['marks'];
+                $from_row = $_POST['from_row'];
+                $to_row = $_POST['to_row'];
+                $name_col = $_POST['name_col'];
+                $marks_col = $_POST['marks_col'];
+
+                $_SESSION["from_row"] =$from_row;
+                $_SESSION["to_row"] = $to_row;
+                $_SESSION["name_col"] = $name_col;
+                $_SESSION["marks_col"] = $marks_col;
               }
+
+             
+
               ?>
             </div>
           </div>

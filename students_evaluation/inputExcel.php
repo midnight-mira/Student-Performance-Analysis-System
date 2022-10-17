@@ -11,13 +11,13 @@
 	<h1>Excel Upload</h1>
 
 
-	<form method="POST" action="excelUpload.php" enctype="multipart/form-data">
+	<form method="POST" action="excel_import.php" enctype="multipart/form-data">
 		<div class="form-group">
 			<label>Upload Excel File</label>
-			<input type="file" name="file" class="form-control">
+			<input type="file" name="import_file" class="form-control">
 		</div>
 		<div class="form-group">
-			<button type="submit" name="Submit" class="btn btn-success">Upload</button>
+			<button type="submit" name="import_excel" class="btn btn-success">Upload</button>
 		</div>
 		<p>Download Demo File from here : <a href="demo.ods"><strong>Demo.ods</strong></a></p>
 	</form>
@@ -26,3 +26,6 @@
 
 </body>
 </html>
+
+<?php
+?>
