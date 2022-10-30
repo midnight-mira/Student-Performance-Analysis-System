@@ -50,8 +50,7 @@ $reader->open($filePath);
 foreach ($reader->getSheetIterator() as $sheet) {
   foreach ($sheet->getRowIterator() as $rowNumber => $row) {
     if ($rowNumber >= $from_row && $rowNumber<= $to_row ) {
-      $value = $row->toArray();
-      $name = $value[$name_col];
+      $value = $row->toArray();      $name = $value[$name_col];
       $grade = $value[$marks_col];
   
       echo $name;
