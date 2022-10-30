@@ -1,3 +1,13 @@
+<?php
+
+// includes the connection file.
+include('../config/connection.php');
+session_start();
+
+$conn = mysqli_connect(LOCALHOST, DB_USERNAME, DB_PASSWORD);
+$db_select = mysqli_select_db($conn, DB_NAME);
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,20 +44,28 @@
   <th><center>Year 4</center></th>
  </tr>
     <tr>
-        <td>2022-23</td>
-        <td></td>
-        <td class="table-active"></td>
-        <td class="table-active"></td>
-        <td class="table-active"></td>
-        <td class="table-active"></td>
+        <?php 
+        $query= mysqli_query($conn, "SELECT * from without_kt");
+        while($row= mysqli_fetch_assoc($query)){
+        
+         ?>
+        <td ><?php echo $row['year'];?></td>
+        <td><?php echo $row['intake_total']. "( ". $row['intake_fe']." + ". $row['intake_dse']. " + ". $row['intake_te']. " )" ;?></td>
+        <td ><?php echo $row['year1']; ?></td>
+        <td ><?php echo $row['year2']; ?></td>
+        <td class="table-active"> <?php echo $row['year3']; ?></td>
+        <td class="table-active"><?php echo $row['year4']; ?></td>
     </tr>
+    <?php 
+        }
+        ?>
     <tr>
-        <td>2021-22</td>
-        <td >9+0</td>
-        <td>6+0</td>
+        <td class="table-active"></td>
+        <td class="table-active" ></td>
         <td class="table-active"></td>
         <td class="table-active"></td>
-         <td class="table-active"></td>
+        <td class="table-active"></td>
+        <td class="table-active"></td>
     </tr>
        <tr>
         <td></td>
@@ -115,13 +133,20 @@
   <th><center>Year 4</center></th>
  </tr>
     <tr>
-        <td>2022-23</td>
-        <td></td>
-        <td class="table-active"></td>
-        <td class="table-active"></td>
-        <td class="table-active"></td>
-        <td class="table-active"></td>
+    <?php 
+        $query= mysqli_query($conn, "SELECT * from with_kt");
+        while($row= mysqli_fetch_assoc($query)){
+         ?>
+        <td><?php echo $row['year'];?></td>
+        <td><?php echo $row['intake_total']. "( ". $row['intake_fe']." + ". $row['intake_dse']. " + ". $row['intake_te']. " )" ;?></td>
+        <td class="table-active"><?php echo $row['year1'];?></td>
+        <td class="table-active"><?php echo $row['year2'];?></td>
+        <td class="table-active"><?php echo $row['year3'];?></td>
+        <td class="table-active"><?php echo $row['year4'];?></td>
     </tr>
+    <?php
+        }
+    ?>
     <tr>
         <td>2021-22</td>
         <td >9+0</td>

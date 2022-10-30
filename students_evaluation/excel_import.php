@@ -22,47 +22,50 @@ $to_row_modify = $to_row - 1;
 D:\XAMPP\htdocs\sps\students_evaluation\2014-15- TO 2017-18_WITHOUT_BACK LOG.xlsx
 
 */
+//$from_row = $_SESSION["from_row"];
+//$to_row = $_SESSION["to_row"];
+//$name_col = $_SESSION["name_col"];
+//$marks_col = $_SESSION["marks_col"];
+
+$from_row='2';
+$to_row='5';
+$name_col='0';
+$marks_col='1';
+
+//$name_cols = $name_col - 1;
+//$marks_cols = $marks_col - 1;
+
+
 use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
 
-$filePath= 'test.xlsx';
+$file_name= 'test.xlsx';
+//$file_name = $_SESSION['fileName'];
+$filePath = 'uploaded-files/' . $file_name;
+
 $reader = ReaderEntityFactory::createReaderFromFile($filePath);
 
 
 $reader->open($filePath);
 
 foreach ($reader->getSheetIterator() as $sheet) {
-    foreach ($sheet->getRowIterator() as $row) {
-       /* if ($rowNumber < $from_row_modify) {
-            $cells = $row->getCells();
-            $nameCell = $cells[$name_cols]; 
-            $markCell = $cells[$marks_cols];
-            $name = $nameCell->getValue();
-            $grade = $markCell->getValue();
-        }*/
-        /*
-        $value= $cells->toArray();
-        $cells = $row->getCells();
-        $A= $value[0]->getValue();
-        $B= $value[1]->getValue(); */
-        
-
-        $value= $row->toArray();
-        $name= $value[0];
-        $grade= $value[1];
-
-        echo $name;
-        echo "  ";
-        echo $grade;
-        echo "<br>";
-        
-        $query= "insert into test1 (name, marks) values ('$name', '$grade')";
-        $result= mysqli_query($conn, $query);
-
-       
+  foreach ($sheet->getRowIterator() as $rowNumber => $row) {
+    if ($rowNumber >= $from_row && $rowNumber<= $to_row ) {
+      $value = $row->toArray();
+      $name = $value[$name_col];
+      $grade = $value[$marks_col];
+  
+      echo $name;
+      echo "  ";
+      echo $grade;
+      echo "<br>";
     }
+   
+  }
 }
 
 $reader->close();
+
+
 
 
 /*
@@ -98,13 +101,16 @@ if (isset($_POST['import_excel']))
 <!DOCTYPE html>
 <html>
 <style>
-table, th, td {
-  border:1px solid black;
-}
+  table,
+  th,
+  td {
+    border: 1px solid black;
+  }
 </style>
+
 <body>
 
-<!--
+  <!--
 
 <table style="width:100%">
   <tr>
@@ -112,7 +118,7 @@ table, th, td {
     <th>Grade</th>
   </tr>
   <tr>
-    <td><?php echo $A;?></td>
+    <td><?php echo $A; ?></td>
     <td><?php echo $B; ?></td>
  
   </tr>
@@ -122,5 +128,5 @@ table, th, td {
 <p>To understand the example better, we have added borders to the table.</p>
 -->
 </body>
-</html>
 
+</html>

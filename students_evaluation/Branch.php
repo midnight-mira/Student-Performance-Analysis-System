@@ -9,27 +9,36 @@ $conn = mysqli_connect(LOCALHOST, DB_USERNAME, DB_PASSWORD);
 $db_select = mysqli_select_db($conn, DB_NAME);
 
 
-
 if (isset($_POST['submit'])) {
   $batch_year = $_POST['batch_year'];
   $sem_number = $_POST['sem'];
-  if ($sem_number == "1" || "2") {
+  echo $sem_number;
+
+  if ($sem_number== "1" || $sem_number=="2") {
     $year = "FE";
-  } elseif ($sem_number == "3" || "4") {
+  }elseif ($sem_number== "3" || $sem_number=="4") {
+
     $year = "SE";
-  } elseif ($sem_number == "5" || "6") {
+
+  } elseif ($sem_number== "5" || $sem_number=="6") {
+
     $year = "TE";
+
   } else {
+    
     $year = "BE";
   }
+  echo $year;
+
 
 
   $_SESSION["batch_year"] = $batch_year;
   $_SESSION["sem_number"] = $sem_number;
   $_SESSION["year"] = $year;
+
   
 
-  header("location:next.php");
+  header("location:next.html");
 
  
   

@@ -5,133 +5,132 @@ session_start();
 
 require_once '../Box/src/Spout/Autoloader/autoload.php';
 
-$from_row= $_SESSION["from_row"] ;
-$to_row= $_SESSION["to_row"];
-$name_col= $_SESSION["name_col"];
-$marks_col= $_SESSION["marks_col"] ;
+//for creation of tables
+$conn = mysqli_connect(LOCALHOST, DB_USERNAME, DB_PASSWORD);
+$db_select = mysqli_select_db($conn, DB_NAME);
+if ($db_select) {
+  // echo "success";
+}
+
+$from_row = $_SESSION["from_row"];
+$to_row = $_SESSION["to_row"];
+$name_col = $_SESSION["name_col"];
+$marks_col = $_SESSION["marks_col"];
+$prnno_col = $_SESSION["prnno_col"];
 
 $name_cols = $name_col - 1;
 $marks_cols = $marks_col - 1;
-$from_row_modify = $from_row - 1;
-$to_row_modify = $to_row - 1;
+$prnno_cols = $prnno_col - 1;
 
 use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
 
-$filePath= $_SESSION["targetPath"];
-echo $filePath;
+$fileName = $_SESSION["fileName"];
+$filePath = 'uploaded-files/' . $fileName;
+$reader = ReaderEntityFactory::createReaderFromFile($filePath);
 
-
-$reader = ReaderEntityFactory::createXLSXReader();
 
 $reader->open($filePath);
 
 foreach ($reader->getSheetIterator() as $sheet) {
-  foreach ($sheet->getRowIterator() as $row) {
-    if ($rowNumber < $from_row && $rowNumber > $to_row) {
-      $cells = $row->getCells();
-      $nameCell = $cells[$name_cols];
-      $markCell = $cells[$marks_cols];
-      $name = $nameCell->getValue();
-      $grade = $markCell->getValue();
+  foreach ($sheet->getRowIterator() as $rowNumber => $row) {
+    if ($rowNumber >= $from_row && $rowNumber <= $to_row) {
+      $value = $row->toArray();
+      $name = $value[$name_cols];
+      $grade = $value[$marks_cols];
+      $prnno = $value[$prnno_cols];
+
+
+      echo $name;
+      echo "  ";
+      echo $grade;
+
+      echo $prnno;
+
+      $batch_year = $_SESSION["batch_year"];
+      $sem_number = $_SESSION["sem_number"];
+      $year = $_SESSION["year"];
+      $sem = "sem" . $sem_number;
+      $table = $batch_year . "_" . $year . "_" . $sem;
+
+
+
+      $create_table_query = "CREATE TABLE `SPS`.`{$table}` (
+        sr_no int NOT NULL AUTO_INCREMENT,
+        prnno varchar(100) NOT NULL,
+        name varchar(100) NOT NULL,
+        result varchar(10),
+        PRIMARY KEY (sr_no, prnno)
+        );";
+      $create_table_query_result = mysqli_query($conn, $create_table_query);
+      if ($create_table_query_result) {
+        echo "success";
+      }
+
+      $query = "INSERT INTO `SPS`.`{$table}` (prnno, name, result) 
+             VALUES(?, ?, ?)";
+      $stmt = mysqli_prepare($conn, $query);
+      $stmt->bind_param("sss", $prnno, $name, $grade);
+      $stmt->execute();
+      $full_table_name = $batch_year . "_table";
+
+      if ($year == "FE" &&  $sem = "sem1") {
+        $full_table_name = $batch_year . "_table";
+        $_SESSION["full_table_name"] = $full_table_name;
+
+        $create_full_table = "CREATE TABLE `SPS`.`{$full_table_name}` (
+          sr_no int NOT NULL AUTO_INCREMENT,
+          prnno varchar(100) NOT NULL,
+          name varchar(100) NOT NULL,
+          sem1 varchar(10), sem2 varchar(10) , sem3 varchar(10) ,sem4 varchar(10) ,sem5 varchar(10) ,sem6 varchar(10) ,sem7 varchar(10) ,sem8 varchar(10) ,
+          PRIMARY KEY (sr_no, prnno)
+      );";
+
+        $query_full_table = mysqli_query($conn, $create_full_table);
+        if ($create_full_table) {
+          echo "success";
+          $query_full = "INSERT INTO `SPS`.`{$full_table_name}` (prnno, name, sem1) 
+          VALUES(?, ?, ?)";
+          $stmt1 = mysqli_prepare($conn, $query_full);
+          $stmt1->bind_param("sss", $prnno, $name, $grade);
+          $stmt1->execute();
+        }
+      } elseif ($year == "SE" && $sem = "sem3") {
+
+        $table_dse = $batch_year . "_DSE";
+        $_SESSION["dse_table_name"] = $table_dse;
+
+        $query_for_dse = "CREATE TABLE `SPS`.`{$table_dse}` (
+          sr_no int NOT NULL AUTO_INCREMENT,
+          prnno varchar(100) NOT NULL,
+          name varchar(100) NOT NULL,
+          sem3 varchar(10) ,sem4 varchar(10) ,sem5 varchar(10) ,sem6 varchar(10) ,sem7 varchar(10) ,sem8 varchar(10) ,
+          PRIMARY KEY (sr_no, prnno)
+      );";
+
+        $query_dse = mysqli_query($conn, $query_for_dse);
+        if ($query_dse) {
+          echo "table bana";
+        }
+      } 
+       
+        
+        
+      
+
+      $_SESSION["sem"] = $sem;
+      $_SESSION["table_name"] = $table;
     }
   }
 }
 
 $reader->close();
+
+header('location:table_show.php');
 ?>
 
 
 
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha3/dist/css/bootstrap.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
-
-</head>
-
-<body>
-  
-  <img src="lr.png" class="img-responsive center-block d-block mx-auto" alt="Sample Image">
-  <section class="vh-100">
-
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col">Sr no</th>
-          <th scope="col">Name</th>
-          <th scope="col">Marks</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td>Ramesh</td>
-          <td>P</td>
-        </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td>Durgesh</td>
-          <td>P</td>
-        </tr>
-        <tr>
-          <th scope="row">3</th>
-          <td>Margesh</td>
-          <td>P</td>
-        </tr>
-        <tr>
-          <th scope="row">4</th>
-          <td>Dilesh</td>
-          <td>F</td>
-        </tr>
-        <tr>
-          <th scope="row">5</th>
-          <td>Shankar</td>
-          <td>F</td>
-        </tr>
-        <tr>
-          <th scope="row">6</th>
-          <td>Shreya</td>
-          <td>P</td>
-        </tr>
-        <tr>
-          <th scope="row">7</th>
-          <td>Akash</td>
-          <td>P</td>
-        </tr>
-        <tr>
-          <th scope="row">8</th>
-          <td>Meera</td>
-          <td>P</td>
-        </tr>
-        <tr>
-          <th scope="row">9</th>
-          <td>Chirayu</td>
-          <td>P</td>
-        </tr>
-        <tr>
-          
-      
-      </tbody>
-    </table>
-    <div class="col-md-12 text-center">
-      <a class="btn btn-primary" href="t_success.php" id="btnCheck">Insert</a>
-
-      <a class="btn btn-primary" href="dashboard.php" id="btnCheck">Cancel</a>
-      <!-- <script>
-            alert("Successfully Added");
-          </script>     -->
-  </section>
-</body>
-
-</html>
 
 <?php
 /*

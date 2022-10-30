@@ -53,11 +53,12 @@ if(isset($_POST['Submit'])){
   if(in_array($file_ext, $allowed_ext)){
     $targetPath = $_FILES['excel_file']['tmp_name'];
     $file_name= $_FILES['excel_file']['name'];
-    $tmp_name= $_FILES['tmp_name'];
     move_uploaded_file($targetPath, "uploaded-files/".$file_name);
     $_SESSION["targetPath"]= $targetPath;
     $_SESSION["tmp_name"]= $tmp_name;
-    header('location:Branch.php');
+    $_SESSION["fileName"]= $file_name;
+    header('location:Branch.html');
+    
   }
   else {
     echo "<h2>Invalid File</h2>";
