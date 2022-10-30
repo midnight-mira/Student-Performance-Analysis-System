@@ -31,7 +31,8 @@
       });
     </script>
     <a class="btn btn-primary btn-lg" href="import.php" type="button">Import Excel</a>
-    <a class="btn btn-primary btn-lg" type="button">Generate report</a>
+    <a class="btn btn-primary btn-lg" href="generate_tables.php" type="button">Generate report</a>
+    <a class="btn btn-primary btn-lg" href="ViewAllTables.php" type="button">View Table</a>
   </div>
                     </div>
                   </div>
