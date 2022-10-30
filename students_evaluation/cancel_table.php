@@ -27,6 +27,7 @@ if($year=="FE" and $sem=="1"){
     $drop_dse_query= mysqli_query($conn, $drop_dse);
 }
 
+header("location:import.php");
 
 
 ?>

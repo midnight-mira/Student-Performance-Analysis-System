@@ -73,7 +73,7 @@ foreach ($reader->getSheetIterator() as $sheet) {
       $stmt->execute();
       $full_table_name = $batch_year . "_table";
 
-      if ($year == "FE" &&  $sem = "sem1") {
+      if ($sem = "sem1") {
         $full_table_name = $batch_year . "_table";
         $_SESSION["full_table_name"] = $full_table_name;
 
@@ -88,13 +88,17 @@ foreach ($reader->getSheetIterator() as $sheet) {
         $query_full_table = mysqli_query($conn, $create_full_table);
         if ($create_full_table) {
           echo "success";
+          /*
           $query_full = "INSERT INTO `SPS`.`{$full_table_name}` (prnno, name, sem1) 
           VALUES(?, ?, ?)";
           $stmt1 = mysqli_prepare($conn, $query_full);
           $stmt1->bind_param("sss", $prnno, $name, $grade);
-          $stmt1->execute();
+          $stmt1->execute();*/
         }
-      } elseif ($year == "SE" && $sem = "sem3") {
+      } 
+      if ($sem = "sem3") {
+
+        echo "ki";
 
         $table_dse = $batch_year . "_DSE";
         $_SESSION["dse_table_name"] = $table_dse;
@@ -109,7 +113,7 @@ foreach ($reader->getSheetIterator() as $sheet) {
 
         $query_dse = mysqli_query($conn, $query_for_dse);
         if ($query_dse) {
-          echo "table bana";
+          echo "table bana dse";
         }
       } 
        

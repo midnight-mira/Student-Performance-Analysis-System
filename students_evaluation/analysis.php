@@ -20,17 +20,26 @@ $full_table_name = $batch_year . "_table";
 echo $full_table_name;
 $table_dse = $batch_year . "_DSE";
 
-if ($year == "FE" && $sem == "sem2") {
+if ($year == "FE" && $sem == "sem1") {
+  $insert_dse = "INSERT INTO `SPS`.`{$full_table_name}` (sr_no, prnno, name, sem1)
+          SELECT sr_no, prnno, name, result FROM `SPS`.`{$table}` ";
+  $insert_test = mysqli_query($conn, $insert_dse);
+  if ($insert_test) {
+    echo "table me value sem1";
+  }
+}
 
-  $query_sem2 = "UPDATE `SPS`.`{$full_table_name}` t1, `SPS`.`{$table}` t2 SET t1.`{$sem}`= t2.result Where t1.prnno=t2.prnno;";
+if ($sem == "sem2") {
+
+  $query_sem2 = "UPDATE `SPS`. `{$full_table_name}` t1, `SPS`.`{$table}` t2 SET t1.`{$sem}`= t2.result Where t1.prnno=t2.prnno;";
   $info_query_sem2 = mysqli_query($conn, $query_sem2);
   if ($info_query_sem2) {
-    echo "hogaya";
+    echo "hogaya sem2 ";
   }
 }
 
 
-if ($year == "SE" && $sem == "sem4") {
+if ($sem == "sem4") {
   $table_dse = $batch_year . "_DSE";
 
   $add_info_full = "UPDATE `SPS`.`{$full_table_name}` t1, `SPS`.`{$table}` t2 SET t1.`{$sem}`= t2.result Where t1.prnno=t2.prnno;";
@@ -46,7 +55,7 @@ if ($year == "SE" && $sem == "sem4") {
   }
 }
 
-if ($year == "SE" && $sem == "sem3") {
+if ($sem == "sem3") {
   $insert_dse = "INSERT INTO `SPS`.`{$table_dse}` (sr_no, prnno, name, sem3)
           SELECT sr_no, prnno, name, result FROM `SPS`.`{$table}` WHERE `{$table}`.prnno NOT IN ( SELECT `{$full_table_name}`.prnno FROM `{$full_table_name}`)";
   $insert_test = mysqli_query($conn, $insert_dse);

@@ -8,9 +8,10 @@ session_start();
 $conn = mysqli_connect(LOCALHOST, DB_USERNAME, DB_PASSWORD);
 $db_select = mysqli_select_db($conn, DB_NAME);
 
-$_SESSION["batch_year"] = $batch_year;
-$_SESSION["sem_number"] = $sem_number;
-$_SESSION["year"] = $year;
+$batch_year= $_SESSION["batch_year"];
+$sem_number= $_SESSION["sem_number"];
+$year= $_SESSION["year"]; 
+
 
 $sem = "sem" . $sem_number;
 $table = $batch_year . "_" . $year . "_" . $sem;
@@ -20,16 +21,14 @@ $full_table_name = $batch_year . "_table";
 
 if ($sem_number % 2 == 0) {
 
-    $sem_new = $sem - 1;
-    $table_odd = $batch . "_" . $year . "_" . $sem_new;
+    $sem_new = $sem_number- 1;
+    $table_odd = $batch_year. "_" . $year . "_" . $sem_new;
 
     $val = mysqli_query($conn, 'select 1 from `.{$table}.` LIMIT 1');
 
+    if ($val == FALSE) {
 
-
-
-    if ($val !== FALSE) {
-        if ($year == "FE" && $sem = "sem2") {
+        if ($sem == "sem2") {
 
             $intake_total = 0;
             $intake_fe = 0;
@@ -37,8 +36,12 @@ if ($sem_number % 2 == 0) {
             $intake_ty = 0;
 
             // full pass
+            echo $full_table_name;
             $compare_query_pass = "SELECT count(*) as name from `{$full_table_name}` where sem1='P' and sem2='P';";
             $compare_query_results = mysqli_query($conn, $compare_query_pass);
+            if($compare_query_results){
+                echo "ji";
+            }
             $data = mysqli_fetch_assoc($compare_query_results);
             $size = $data['name'];
             $count_pass = $size;
@@ -68,12 +71,14 @@ if ($sem_number % 2 == 0) {
             $stmt = mysqli_prepare($conn, $add_table_kt);
             $stmt->bind_param("ssss", $batch_year, $intake_total, $intake_total, $count_kt);
             $stmt->execute();
-        } elseif ($year == "SE") {
+
+        } 
+        if ($sem == "sem4") {
 
             // full pass
-            $compare_query_pass = "SELECT count(*) as name from `{$full_table_name}` where sem1='P' and sem2='P' and sem3='P' and sem4='P';";
-            $compare_query_results = mysqli_query($conn, $compare_query_pass);
-            $data = mysqli_fetch_assoc($compare_query_results);
+            $compare_query_pass_se = "SELECT count(*) as name from `{$full_table_name}` where sem1='P' and sem2='P' and sem3='P' and sem4='P';";
+            $compare_query_results_se = mysqli_query($conn, $compare_query_pass_se);
+            $data = mysqli_fetch_assoc($compare_query_results_se);
             $size = $data['name'];
             $count_pass = $size;
             //echo $count_pass;
@@ -128,7 +133,7 @@ if ($sem_number % 2 == 0) {
                 echo "done";
             }
 
-            $year2_dse = $count_kt_dse + $count_kt;
+            $year2_dse = $count_kt_dse." + ".$count_kt;
 
             $add_table_kt = "UPDATE with_kt
             SET intake_total = '$intakeTotal', intake_dse= '$intake_total_dse', year2= '$year2_dse'
@@ -138,7 +143,8 @@ if ($sem_number % 2 == 0) {
                 echo "done";
             }
 
-        } elseif ($year == "TE") {
+        } 
+        if ($year == "TE") {
 
             // full pass
             $compare_query_pass = "SELECT count(*) as name from `{$full_table_name}` where sem1='P' and sem2='P' and sem3='P' and sem4='P' and sem5='P' and sem6='P';";
@@ -184,14 +190,15 @@ if ($sem_number % 2 == 0) {
             WHERE year = '$batch_year';";
             $add1 = mysqli_query($conn, $add_table);
 
-            $year3_dse = $count_kt_dse + $count_kt;
+            $year3_dse = $count_kt_dse ."+". $count_kt;
 
             $add_table_kt = "UPDATE with_kt
             SET  year3= '$year3_dse'
             WHERE year = '$batch_year';";
             $add2 = mysqli_query($conn, $add_table_kt);
 
-        } elseif ($year == "BE") {
+        } 
+        if ($year == "BE") {
 
             // full pass
             $compare_query_pass = "SELECT count(*) as name from `{$full_table_name}` where sem1='P' and sem2='P' and sem3='P' and sem4='P' and sem5='P' and sem6='P' and sem7='P' and sem8='P' ;";
@@ -233,7 +240,7 @@ if ($sem_number % 2 == 0) {
             WHERE year = '$batch_year';";
             $add2 = mysqli_query($conn, $add_table);
 
-            $year4_dse = $count_kt_dse + $count_kt;
+            $year4_dse = $count_kt_dse ."+". $count_kt;
 
             $add_table_kt = "UPDATE with_kt
             SET  year4= '$year4_dse'
@@ -241,7 +248,12 @@ if ($sem_number % 2 == 0) {
             $add2 = mysqli_query($conn, $add_table_kt);
         }
     } 
-    else {
-        header('location:dashboard.php');
-    }
+
+    session_destroy();
+    header("location:t_success.php");
+ 
 }
+else{
+    header("location: dashboard.php");
+}
+?>
