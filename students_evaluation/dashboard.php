@@ -9,6 +9,7 @@
 </head>
 <body>
     <img src="lr.png" class="img-responsive center-block d-block mx-auto" alt="Sample Image">
+    
         <section class="vh-100" style="background-color: #022058;">    
             <div class="container py-5 h-100">
               <div class="row d-flex justify-content-center align-items-center h-100">

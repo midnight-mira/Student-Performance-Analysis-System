@@ -73,7 +73,7 @@ foreach ($reader->getSheetIterator() as $sheet) {
       $stmt->execute();
       $full_table_name = $batch_year . "_table";
 
-      if ($sem = "sem1") {
+      if ($sem == "sem1") {
         $full_table_name = $batch_year . "_table";
         $_SESSION["full_table_name"] = $full_table_name;
 
@@ -96,7 +96,7 @@ foreach ($reader->getSheetIterator() as $sheet) {
           $stmt1->execute();*/
         }
       } 
-      if ($sem = "sem3") {
+      if ($sem == "sem3") {
 
         echo "ki";
 

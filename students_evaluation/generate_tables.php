@@ -148,9 +148,9 @@ $db_select = mysqli_select_db($conn, DB_NAME);
         }
     ?>
     <tr>
-        <td>2021-22</td>
-        <td >9+0</td>
-        <td>3+0</td>
+        <td></td>
+        <td ></td>
+        <td></td>
         <td class="table-active"></td>
         <td class="table-active"></td>
          <td class="table-active"></td>
